@@ -83,46 +83,48 @@ class Game:
                     return True
 
     def check_win_combination_in_a_diagonal_from_start_to_end(self, symbol, number_of_row):
-        counter = 0
-        for i in range(number_of_row, self.Field.value_of_column):
-            diagonal_shift = i
-            for j in self.Field.field[number_of_row:len(self.Field.field) - diagonal_shift]:
-                print('*start_to_end*')
-                print(self.Field.field[number_of_row:len(self.Field.field) - diagonal_shift])
-                print (j)
-                print(diagonal_shift)
-                print(j[diagonal_shift])
-                if j[diagonal_shift] == symbol:
+        result = []
+        counter_symbol = 0
+        for i in range(0, number_of_row):
+            for j in range(0, number_of_row):
+                result.clear()
+                if j > 0 and i > 0:
+                    break
+                counter = i
+                for k in range(j, number_of_row - i):
+                    result.append(self.Field.field[counter][k])
+                    if self.Field.field[counter][k] == symbol:
+                        counter_symbol += 1
+                    else:
+                        counter_symbol = 0
+                    if counter_symbol == self.win_count:
+                        return True
                     counter += 1
-                else:
-                    counter = 0
-                if counter == self.win_count:
-                    return True
-                diagonal_shift += 1
 
     def check_win_combination_in_a_diagonal_from_end_to_start(self, symbol, number_of_row):
-        counter = 0
-        for i in range(number_of_row, self.Field.value_of_column, -1):
-            diagonal_shift = i
-            for j in self.Field.field[number_of_row:len(self.Field.field) - diagonal_shift, -1]:
-                print('*end_to_start*')
-                print(self.Field.field[number_of_row:len(self.Field.field) - diagonal_shift])
-                print(j)
-                print(diagonal_shift)
-                print(j[diagonal_shift])
-                if j[diagonal_shift] == symbol:
-                    counter += 1
-                else:
-                    counter = 0
-                if counter == self.win_count:
-                    return True
-                diagonal_shift += 1
+        result = []
+        counter_symbol = 0
+        for i in reversed(range(0, number_of_row)):
+            for j in range(0, number_of_row):
+                result.clear()
+                if j > 0 and i < number_of_row - 1:
+                    break
+                counter = i
+                for k in range(j, i + 1):
+                    result.append(self.Field.field[counter][k])
+                    if self.Field.field[counter][k] == symbol:
+                        counter_symbol += 1
+                    else:
+                        counter_symbol = 0
+                    if counter_symbol == self.win_count:
+                        return True
+                    counter -= 1
 
     def check_win_comination_in_a_diagonals(self, symbol):
-        for i in range(self.Field.value_of_column):
-            if self.check_win_combination_in_a_diagonal_from_start_to_end(symbol, i) is True:
+
+            if self.check_win_combination_in_a_diagonal_from_start_to_end(symbol, self.Field.value_of_column) is True:
                 return True
-            if self.check_win_combination_in_a_diagonal_from_end_to_start(symbol, i) is True:
+            if self.check_win_combination_in_a_diagonal_from_end_to_start(symbol, self.Field.value_of_column) is True:
                 return True
 
     def check_win(self, symbol):
